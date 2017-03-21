@@ -1,0 +1,6 @@
+fragment PostedByFragment on Entry {
+  postedBy {
+     html_url
+     login
+  }
+}

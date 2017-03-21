@@ -6,6 +6,8 @@ import { propType } from 'graphql-anywhere';
 
 import InfoLabel from './InfoLabel';
 
+import PostedByFragmentFromFile from './PostedByFragment.graphql';
+
 const RepoInfo = ({
   entry: {
     createdAt,
@@ -48,6 +50,15 @@ const RepoInfo = ({
   </div>
 );
 
+const PostedByFragmentInline = gql`
+    fragment PostedByFragment on Entry {
+      postedBy {
+         html_url
+         login
+      }
+    }
+  `;
+
 RepoInfo.fragments = {
   entry: gql`
     fragment RepoInfo on Entry {
@@ -57,13 +68,13 @@ RepoInfo.fragments = {
         stargazers_count
         open_issues_count
       }
-      postedBy {
-         html_url
-         login
-      }
+      ...PostedByFragment
     }
+    ${PostedByFragmentFromFile}
   `,
 };
+
+// ^^^ PostedByFragmentFromFile does not work but PostedByFragmentInline works
 
 RepoInfo.propTypes = {
   entry: propType(RepoInfo.fragments.entry).isRequired,
